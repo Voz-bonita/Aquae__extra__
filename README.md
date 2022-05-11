@@ -19,3 +19,5 @@ A segunda solução foi utilizar as ferramentas do desenvolvedor diponíveis no 
 ##### Leitura de arquivos .csv
 
 Pesquisando um pouco mais afundo no site do [INMET](https://portal.inmet.gov.br/dadoshistoricos) e encontrar os dados históricos de todas as estações disponíveis separados em blocos de ano a ano e verificar que esses arquivos contém os dados diários, seguiu-se com a terceira solução, baixar todos esses zip's contendo csv's e escrever um script para extrair os dados de chuva e coloca-los em um arquivo de json, que servirá para popular a base de dados de pluviometria do <i>aquae</i> num primeiro momento.
+
+**Obs**: Essa é visivelmente a solução que coleta os dados de forma mais rápida, entre as apresentadas aqui

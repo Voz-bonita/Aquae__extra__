@@ -20,4 +20,9 @@ A segunda solução foi utilizar as ferramentas do desenvolvedor diponíveis no 
 
 Pesquisando um pouco mais afundo no site do [INMET](https://portal.inmet.gov.br/dadoshistoricos) e encontrar os dados históricos de todas as estações disponíveis separados em blocos de ano a ano e verificar que esses arquivos contém os dados diários, seguiu-se com a terceira solução, baixar todos esses zip's contendo csv's e escrever um script para extrair os dados de chuva e coloca-los em um arquivo de json, que servirá para popular a base de dados de pluviometria do <i>aquae</i> num primeiro momento.
 
+A maior dificuldade dessa solução é que esses dados históricos tem pequenas variações de formatação e typos.
+
+-   Sobre a formatação: existem datas que são da forma dd-mm-yyyy e outras da forma dd/mm/yyyy, tendo sido identificadas apenas essas duas até o momento (foram feitos alguns testes com regex, porém isso desacelera muito o código para coletar as informações de todos os csv).
+-   Sobre os typos: encontraram-se nomes errados de estações, por exemplo em São Paulo a estação de Bebedouro tem dados apenas para 2021, porém há dados para a estação "Bebdouro" em anos anteriores.
+
 **Obs**: Essa é visivelmente a solução que coleta os dados de forma mais rápida, entre as apresentadas aqui

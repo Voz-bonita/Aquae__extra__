@@ -1,12 +1,12 @@
 # Objetivo
 
-Este repositório tem por objetivo organizar scripts interessantes que foram desenvolvidos para solucionar alguma demanda do [Aquae](https://github.com/SamuelNoB/Aquae) e que sejam capazes de sustentar alguma grande utilidade sozinhos
+Este repositório tem por objetivo organizar scripts interessantes que foram desenvolvidos para solucionar alguma demanda do [<i>aquae</i>](https://github.com/SamuelNoB/Aquae) e que sejam capazes de sustentar alguma grande utilidade sozinhos
 
 ### [`Coleta de Pluviometria`](Coleta_de_pluviometria/)
 
 #### Motivação
 
-Para a simulação do aproveitamento de água da chuva, o [Aquae](https://github.com/SamuelNoB/Aquae) necessita dos dados sobre a chuva da região em questão, logo para expandir a inclusão do formulário em relação às cidades do Brasil precisava-se coletar os dados sobre pluviometria de mais cidades além de Brasília. O [INMET (Instituto Nacional de Meteorologia)](https://portal.inmet.gov.br/) fornece os dados da precipitação em cada cidade/estação na base de dados que pode ser acessada no próprio site.
+Para a simulação do aproveitamento de água da chuva, o [<i>aquae</i>](https://github.com/SamuelNoB/Aquae) necessita dos dados sobre a chuva da região em questão, logo para expandir a inclusão do formulário em relação às cidades do Brasil precisava-se coletar os dados sobre pluviometria de mais cidades além de Brasília. O [INMET (Instituto Nacional de Meteorologia)](https://portal.inmet.gov.br/) fornece os dados da precipitação em cada cidade/estação na base de dados que pode ser acessada no próprio site.
 
 ##### [`Automação de navegador`](Coleta_de_pluviometria/Tabela_de_Pluviometria.py)
 

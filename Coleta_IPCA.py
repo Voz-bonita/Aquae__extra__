@@ -1,6 +1,6 @@
 import requests
 from datetime import date
-
+import ast
 
 hoje = date.today()
 ano = hoje.year
@@ -18,3 +18,7 @@ payload = {
 response = requests.post(url, data=payload)
 print(response.status_code)
 print(response.content)
+
+response__list__ = ast.literal_eval(response.content.decode())
+ni = float(response__list__[0]["V"])
+print(ni)

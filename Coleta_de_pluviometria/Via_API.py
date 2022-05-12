@@ -1,4 +1,4 @@
-import urllib.request, json
+import urllib.request
 from datetime import date
 from calendar import monthrange
 import json

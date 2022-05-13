@@ -41,25 +41,21 @@ estados = [
     "TO",
 ]
 dados = {uf: {} for uf in estados}
+estacao_typos = {"BEBDOURO": "BEBEDOURO"}
 
 DIR = "./Coleta_de_pluviometria/CSVs"
 files = os.listdir(DIR)
 for file in files:
     path = f"{DIR}/{file}"
+
     info = file.split("_")
     uf = info[2]
     estacao = info[4]
 
-    with open(path, "r") as text_file:
-        linhas = text_file.readlines()
-        n = len(linhas)
+    if estacao in estacao_typos:
+        estacao = estacao_typos[estacao]
 
-    with open(path, "w") as text_file:
-        for i in range(n):
-            if i > 7:
-                text_file.write(linhas[i])
-
-    tabela = pd.read_csv(path, sep=";")
+    tabela = pd.read_csv(path, sep=";", skiprows=8)
     tabela = tabela.iloc[:, [0, 2]]
 
     tabela.set_axis(["Data", "Precipitacao"], axis="columns", inplace=True)

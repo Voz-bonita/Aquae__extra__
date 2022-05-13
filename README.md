@@ -26,3 +26,7 @@ A maior dificuldade dessa solução é que esses dados históricos tem pequenas 
 -   Sobre os typos: encontraram-se nomes errados de estações, por exemplo em São Paulo a estação de Bebedouro tem dados apenas para 2021, porém há dados para a estação "Bebdouro" em anos anteriores.
 
 **Obs**: Essa é visivelmente a solução que coleta os dados de forma mais rápida, entre as apresentadas aqui
+
+##### [`Obtenção das medianas`](Coleta_de_pluviometria/Limpa_Pluviometria.py)
+
+Dispondo dos dados de pluviometria de cada estação, organizados num [`único arquivo`](Coleta_de_pluviometria/Pluviometria_Brasil.json), seguiu-se com a obtenção de medianas de cada mês para fazer as simulações do <i>aquae</i>, excluindo para o cálculo dessas medianas os valores zerados e com isso excluindo estações que não apresentassem ao menos três valores não nulos em cada mês, uma vez que valores nulos poderiam ser valores que indicam a não medição da pluviometria e não de fato uma pluviometria nula. Obteve-se o resultado final [`Pluviometria_Mediana`](Coleta_de_pluviometria/Pluviometria_Mediana.json)

@@ -18,7 +18,7 @@ A segunda solução foi utilizar as ferramentas do desenvolvedor diponíveis no 
 
 ##### [`Leitura de arquivos .csv`](Coleta_de_pluviometria/CSV_para_Json.py)
 
-Pesquisando um pouco mais afundo no site do [INMET](https://portal.inmet.gov.br/dadoshistoricos) e encontrar os dados históricos de todas as estações disponíveis separados em blocos de ano a ano e verificar que esses arquivos contém os dados diários, seguiu-se com a terceira solução, baixar todos esses zip's contendo csv's e escrever um script para extrair os dados de chuva e coloca-los em um arquivo de json, que servirá para popular a base de dados de pluviometria do <i>aquae</i> num primeiro momento.
+Pesquisando um pouco mais a fundo no site do [INMET](https://portal.inmet.gov.br/dadoshistoricos) e encontrar os dados históricos de todas as estações disponíveis separados em blocos de ano a ano e verificar que esses arquivos contém os dados diários, seguiu-se com a terceira solução, baixar todos esses zip's contendo csv's e escrever um script para extrair os dados de chuva e coloca-los em um arquivo de json, que servirá para popular a base de dados de pluviometria do <i>aquae</i> num primeiro momento.
 
 A maior dificuldade dessa solução é que esses dados históricos tem pequenas variações de formatação e typos.
 

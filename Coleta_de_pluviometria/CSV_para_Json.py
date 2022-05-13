@@ -55,7 +55,7 @@ for file in files:
     if estacao in estacao_typos:
         estacao = estacao_typos[estacao]
 
-    tabela = pd.read_csv(path, sep=";", skiprows=8)
+    tabela = pd.read_csv(path, sep=";", skiprows=8, encoding="latin1")
     tabela = tabela.iloc[:, [0, 2]]
 
     tabela.set_axis(["Data", "Precipitacao"], axis="columns", inplace=True)

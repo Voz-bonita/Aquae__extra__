@@ -40,3 +40,9 @@ A maior dificuldade dessa solução é que esses dados históricos tem pequenas 
 ##### [`Obtenção das medianas`](Coleta_de_pluviometria/Limpa_Pluviometria.py)
 
 Dispondo dos dados de pluviometria de cada estação, organizados num [`único arquivo`](Coleta_de_pluviometria/Pluviometria_Brasil.json), seguiu-se com a obtenção de medianas de cada mês para fazer as simulações do <i>aquae</i>, excluindo para o cálculo dessas medianas os valores zerados e com isso excluindo estações que não apresentassem ao menos três valores não nulos em cada mês, uma vez que valores nulos poderiam ser valores que indicam a não medição da pluviometria e não de fato uma pluviometria nula. Obteve-se o resultado final [`Pluviometria_Mediana`](Coleta_de_pluviometria/Pluviometria_Mediana.json)
+
+### `Coleta de tarifa de água`
+
+#### Motivação
+
+Com o plano de tornar o <i>aquae</i> mais inclusivo, com respeito às regiões do Brasil, constatou-se a necessidade de saber as diversas tarifas por consumo de água que são cobradas ao redor do país. Começando por Brasília, que já estava em funcionamento no simulador, desenvolveu-se o [script](Tarifa_CAESB.py) para coletar as tarifas apresentadas no [site da CAESB](https://www.caesb.df.gov.br/tarifas-e-precos.html).

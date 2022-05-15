@@ -2,6 +2,12 @@
 
 Este repositório tem por objetivo organizar scripts interessantes que foram desenvolvidos para solucionar alguma demanda do [<i>aquae</i>](https://github.com/SamuelNoB/Aquae) e que sejam capazes de sustentar alguma grande utilidade sozinhos
 
+### [`Coleta do IPCA`]
+
+#### Motivação
+
+Originalmente o <i>aquae</i> foi projetado utilizando preços dos equipamentos e peças necessárias para os sistemas de aproveitamento coletados em 2018, e com os fênomenos econômicos que regulam o mercado segue-se que os preços eventualmente ficaram desatualizados. Idealmente o simulador deveria se manter atualizado com o passar dos anos, para tanto começou-se por utilizar a cotação do dólar como indicador para atualização dos preços, entretanto, constatou-se que esse método gerava um sobre-preço dos equipamentos. Conversando com fornecedores destes produtos verificou-se que alguns dos mesmos estavam o utilizando o IPCA para corrigir os preços, e fazendo o mesmo no <i>aquae</i> obteve-se um retrato mais fidedigno das simulações.
+
 ### [`Coleta de Pluviometria`](Coleta_de_pluviometria/)
 
 #### Motivação

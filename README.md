@@ -46,3 +46,8 @@ Dispondo dos dados de pluviometria de cada estação, organizados num [`único a
 #### Motivação
 
 Com o plano de tornar o <i>aquae</i> mais inclusivo, com respeito às regiões do Brasil, constatou-se a necessidade de saber as diversas tarifas por consumo de água que são cobradas ao redor do país. Começando por Brasília, que já estava em funcionamento no simulador, desenvolveu-se o [script](Tarifa_CAESB.py) para coletar as tarifas apresentadas no [site da CAESB](https://www.caesb.df.gov.br/tarifas-e-precos.html).
+
+#### Mudanças desejadas
+
+-   Método mais consistente para coleta das alíquotas, invés de procurar por xpath na página;
+-   Método que permita a generalização de coleta das alíquotas, para o maior número de compainhas de saneamento do Brasil.

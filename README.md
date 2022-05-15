@@ -8,6 +8,10 @@ Este repositório tem por objetivo organizar scripts interessantes que foram des
 
 Originalmente o <i>aquae</i> foi projetado utilizando preços dos equipamentos e peças necessárias para os sistemas de aproveitamento coletados em 2018, e com os fênomenos econômicos que regulam o mercado segue-se que os preços eventualmente ficaram desatualizados. Idealmente o simulador deveria se manter atualizado com o passar dos anos, para tanto começou-se por utilizar a cotação do dólar como indicador para atualização dos preços, entretanto, constatou-se que esse método gerava um sobre-preço dos equipamentos. Conversando com fornecedores destes produtos verificou-se que alguns dos mesmos estavam o utilizando o IPCA para corrigir os preços, e fazendo o mesmo no <i>aquae</i> obteve-se um retrato mais fidedigno das simulações.
 
+#### [`O Script`](Coleta_IPCA)
+
+Procurando no site do [IBGE (Instituto Brasileiro de Geografia e Estatística)](https://www.ibge.gov.br/explica/inflacao.php), encontrou-se a metodologia de cálculo do indicador e a [tabela no SIDRA](https://sidra.ibge.gov.br/tabela/1737) onde é possível encontrar os números índices para cálculo do indicador. Então seguiu-se utilizando as <i>devtools</i>, de onde foi possível descobrir que enviando um <i>POST request</i> com um payload adequado para o endereço [https://sidra.ibge.gov.br/Ajax/JSon/Valores/1/1737](https://sidra.ibge.gov.br/Ajax/JSon/Valores/1/1737) obtém-se o número índice desejado como resposta.
+
 ### [`Coleta de Pluviometria`](Coleta_de_pluviometria/)
 
 #### Motivação

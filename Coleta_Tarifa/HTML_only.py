@@ -4,6 +4,16 @@ from bs4 import BeautifulSoup
 import re
 
 
+def build_mocks(faixas, aliquotas):
+    mock = []
+
+    for faixa, aliquota in zip(faixas, aliquotas):
+        mn, mx = faixa.split(" a ")
+        mock.append({"min": mn, "max": mx, "tarifa": round(float(aliquota), 2)})
+
+    return mock
+
+
 CAESB = {
     "io": "https://www.caesb.df.gov.br/tarifas-e-precos.html",
     "match": "RESIDENCIAL PADRÃO",
@@ -46,11 +56,12 @@ faixas = re.findall("\d+ a \d+", faixas__str__)
 faixas.insert(0, f"0 a {int(faixas[0].split(' a ')[0]) - 1}")
 faixas.append(f"{int(faixas[-1].split(' a ')[1]) + 1} a 9999999")
 aliquota__min__ = str(df["Tarifas"].loc[0][0])
-aliquota__min__ = f"{aliquota__min__[:-2]},{aliquota__min__[-2:]}"
+aliquota__min__ = float(f"{aliquota__min__[:-2]}.{aliquota__min__[-2:]}") / float(
+    faixas[0].split(" a ")[1]
+)
 aliquotas = df["Tarifas"].loc[0][1].split("- ")[1].replace(",", ".").split("  ")
 aliquotas.insert(0, aliquota__min__)
-print(faixas)
-print(aliquotas)
+print(build_mocks(faixas=faixas, aliquotas=aliquotas))
 
 # DF = "https://www.caesb.df.gov.br/tarifas-e-precos.html"
 # SC = "https://www.casan.com.br/menu-conteudo/index/url/residencial"

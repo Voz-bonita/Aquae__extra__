@@ -55,11 +55,23 @@ def tarifa_SC():
 
 # print(pd.read_html(**CAEMA))
 
-CAGECE = {
-    "io": "https://www.cagece.com.br/produtos-e-servicos/precos-e-prazos/estrutura-tarifaria/",
-    "header": [0],
-}
-# print(pd.read_html(**CAGECE))
+
+def tarifa_CE():
+    CAGECE = {
+        "io": "https://www.cagece.com.br/produtos-e-servicos/precos-e-prazos/estrutura-tarifaria/",
+        "header": [0],
+    }
+
+    df = pd.read_html(**CAGECE)[0]
+    df["Categoria"] = df["Categoria"].apply(lambda x: x.split("Demanda")[0])
+    residencial = df[df["Categoria"] == "Residencial Normal"]
+    faixas = list(residencial["Faixa de Consumo (m³)"])[0]
+    faixas = re.findall("\d+ a \d+", faixas)
+    faixas.append(f"{int(faixas[-1][-2:]) + 1} a 999999")
+    aliquotas = list(residencial["Tarifa Água(R$/m³)"])[0]
+    aliquotas = aliquotas.replace(",", ".").split()
+
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
 def tarifa_SE():

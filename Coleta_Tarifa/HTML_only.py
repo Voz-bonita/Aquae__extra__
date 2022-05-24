@@ -48,8 +48,6 @@ DESOSE = {"io": "https://www.deso-se.com.br/menu/quadro-tarifario"}
 
 df = pd.read_html(**DESOSE)[0]
 
-# df["Tarifas"] = df["Tarifas"].apply(lambda x: x[1].split("- ")[1], axis=1)
-# df["Faixas de Consumo"] = df["Faixas de Consumo"].apply(lambda x: str(x[0]), axis=1)
 residencial = df.loc[(df["Categorias"] == "Residencial").iloc[:, 0]]
 faixas__str__ = residencial["Faixas de Consumo"].loc[0][0]
 faixas = re.findall("\d+ a \d+", faixas__str__)

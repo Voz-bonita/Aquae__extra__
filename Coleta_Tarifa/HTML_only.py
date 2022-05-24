@@ -14,15 +14,23 @@ def build_mocks(faixas, aliquotas):
     return mock
 
 
-CAESB = {
-    "io": "https://www.caesb.df.gov.br/tarifas-e-precos.html",
-    "match": "RESIDENCIAL PADRÃO",
-    "skiprows": 1,
-    "header": [0],
-}
+def tarifa_DF():
+    CAESB = {
+        "io": "https://www.caesb.df.gov.br/tarifas-e-precos.html",
+        "match": "RESIDENCIAL PADRÃO",
+        "skiprows": 1,
+        "header": [0],
+        "thousands": ".",
+        "decimal": ",",
+    }
 
-# df = pd.read_html(**CAESB)[0]
-# print(df)
+    df = pd.read_html(**CAESB)[0]
+    df.drop(len(df) - 1, inplace=True)
+    faixas = list(df["Faixa m³.1"])
+    faixas[-1] = f"{faixas[-1][-2:]} a 9999999"
+    aliquotas = list(df["Alíquota (R$)  Preço p/ m³"])
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
+
 
 CASAN = {
     "io": "https://www.casan.com.br/menu-conteudo/index/url/residencial",

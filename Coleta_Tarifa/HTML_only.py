@@ -44,22 +44,25 @@ CAGECE = {
 }
 # print(pd.read_html(**CAGECE))
 
-DESOSE = {"io": "https://www.deso-se.com.br/menu/quadro-tarifario"}
 
-df = pd.read_html(**DESOSE)[0]
+def tarifa_SE():
+    DESOSE = {"io": "https://www.deso-se.com.br/menu/quadro-tarifario"}
 
-residencial = df.loc[(df["Categorias"] == "Residencial").iloc[:, 0]]
-faixas__str__ = residencial["Faixas de Consumo"].loc[0][0]
-faixas = re.findall("\d+ a \d+", faixas__str__)
-faixas.insert(0, f"0 a {int(faixas[0].split(' a ')[0]) - 1}")
-faixas.append(f"{int(faixas[-1].split(' a ')[1]) + 1} a 9999999")
-aliquota__min__ = str(df["Tarifas"].loc[0][0])
-aliquota__min__ = float(f"{aliquota__min__[:-2]}.{aliquota__min__[-2:]}") / float(
-    faixas[0].split(" a ")[1]
-)
-aliquotas = df["Tarifas"].loc[0][1].split("- ")[1].replace(",", ".").split("  ")
-aliquotas.insert(0, aliquota__min__)
-print(build_mocks(faixas=faixas, aliquotas=aliquotas))
+    df = pd.read_html(**DESOSE)[0]
+
+    residencial = df.loc[(df["Categorias"] == "Residencial").iloc[:, 0]]
+    faixas__str__ = residencial["Faixas de Consumo"].loc[0][0]
+    faixas = re.findall("\d+ a \d+", faixas__str__)
+    faixas.insert(0, f"0 a {int(faixas[0].split(' a ')[0]) - 1}")
+    faixas.append(f"{int(faixas[-1].split(' a ')[1]) + 1} a 9999999")
+    aliquota__min__ = str(df["Tarifas"].loc[0][0])
+    aliquota__min__ = float(f"{aliquota__min__[:-2]}.{aliquota__min__[-2:]}") / float(
+        faixas[0].split(" a ")[1]
+    )
+    aliquotas = df["Tarifas"].loc[0][1].split("- ")[1].replace(",", ".").split("  ")
+    aliquotas.insert(0, aliquota__min__)
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
+
 
 # DF = "https://www.caesb.df.gov.br/tarifas-e-precos.html"
 # SC = "https://www.casan.com.br/menu-conteudo/index/url/residencial"

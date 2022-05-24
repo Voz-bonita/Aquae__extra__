@@ -48,12 +48,27 @@ def tarifa_SC():
     return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
-# CAEMA = {
-#     "io": "http://gsan.caema.ma.gov.br:8080/gsan/exibirConsultarEstruturaTarifariaPortalCaemaAction.do",
-#     "match": "Valor (R$)",
-# }
+def tarifa_MA():
+    CAEMA = {
+        "io": "http://gsan.caema.ma.gov.br:8080/gsan/exibirConsultarEstruturaTarifariaPortalCaemaAction.do",
+        "thousands": ".",
+        "decimal": ",",
+    }
 
-# print(pd.read_html(**CAEMA))
+    # indice 1 já representa o residencial normal
+    df = pd.read_html(**CAEMA)[1]
+    df["Faixa de Consumo (m³/Eco/mês)"] = df["Faixa de Consumo (m³/Eco/mês)"].apply(
+        lambda x: x.replace("até ", "")
+        .replace("excedente de ", "")
+        .replace("m³", "")
+        .replace("-", "a")
+    )
+    faixas = list(df["Faixa de Consumo (m³/Eco/mês)"])
+    faixas[0] = f"0 a {int(faixas[0]) - 1}"
+    faixas[-1] = f"{int(faixas[-1]) + 1} a 999999"
+    aliquotas = list(df["Valor (R$)"])
+
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
 def tarifa_CE():
@@ -93,15 +108,5 @@ def tarifa_SE():
     return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
-# DF = "https://www.caesb.df.gov.br/tarifas-e-precos.html"
-# SC = "https://www.casan.com.br/menu-conteudo/index/url/residencial"
-# CE = (
-#     "https://www.cagece.com.br/produtos-e-servicos/precos-e-prazos/estrutura-tarifaria/"
-# )
-# SE = "https://www.deso-se.com.br/menu/quadro-tarifario"
-
-
 Campo_Grande_MS = "https://www.aguasguariroba.com.br/legislacao-e-tarifas/"
-MA = "http://gsan.caema.ma.gov.br:8080/gsan/exibirConsultarEstruturaTarifariaPortalCaemaAction.do"
-
 AL = "https://www.casal.al.gov.br/estrutura-tarifaria/"

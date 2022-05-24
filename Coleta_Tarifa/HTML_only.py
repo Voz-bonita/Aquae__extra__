@@ -32,12 +32,21 @@ def tarifa_DF():
     return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
-CASAN = {
-    "io": "https://www.casan.com.br/menu-conteudo/index/url/residencial",
-    "header": [0],
-}
+def tarifa_SC():
+    CASAN = {
+        "io": "https://www.casan.com.br/menu-conteudo/index/url/residencial",
+        "header": [0],
+    }
 
-# print(pd.read_html(**CASAN)[0])
+    df = pd.read_html(**CASAN)[0]
+    df = df[1:]
+    faixas = list(df["Volumes (m³)"])
+    faixas[0] = f"0 a {faixas[0].split(' a ')[1]}"
+    aliquotas = list(
+        df["Água (R$)"].apply(lambda x: x.replace("R$ ", "").replace(",", "."))
+    )
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
+
 
 # CAEMA = {
 #     "io": "http://gsan.caema.ma.gov.br:8080/gsan/exibirConsultarEstruturaTarifariaPortalCaemaAction.do",

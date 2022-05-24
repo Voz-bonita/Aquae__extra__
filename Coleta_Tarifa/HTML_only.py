@@ -136,4 +136,14 @@ def tarifa_AL():
     return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
-Campo_Grande_MS = "https://www.aguasguariroba.com.br/legislacao-e-tarifas/"
+def tarifa_Campo_Grande():
+    GUARIROBA = {"io": "https://www.aguasguariroba.com.br/legislacao-e-tarifas/"}
+    df = pd.read_html(**GUARIROBA)[0]
+    residencial = df[df[0] == "Residencial"].head(1)
+
+    faixas = re.findall("\d+ a \d+", list(residencial[1])[0])
+    faixas[0] = f"0{faixas[0][1:]}"
+    faixas.append(f"{int(faixas[-1].split(' a ')[1]) + 1} a 999999")
+    aliquotas = list(residencial[2])[0].replace(",", ".").split()
+
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)

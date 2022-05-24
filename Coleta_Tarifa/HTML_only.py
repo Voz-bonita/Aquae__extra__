@@ -1,3 +1,4 @@
+import enum
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -108,5 +109,32 @@ def tarifa_SE():
     return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
+def tarifa_AL():
+    url = "https://www.casal.al.gov.br/estrutura-tarifaria/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content)
+    data = soup.find_all("td")
+
+    faixas = list(
+        map(
+            lambda x: x.text.replace("Até ", "")
+            .replace("m³", "")
+            .replace("–", "a")
+            .replace("\xa0 ", ""),
+            data[5].find_all("p"),
+        )
+    )
+    aliquotas = list(map(lambda x: x.text.replace(",", "."), data[6].find_all("p")))
+
+    faixas.pop(1)
+    faixas = faixas[:8]
+    faixas[0] = f"0 a {faixas[0]}"
+    faixas.append(f"{int(faixas[-1].split('a')[1]) + 1} a 999999")
+
+    aliquotas.pop(1)
+    aliquotas = aliquotas[:9]
+
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
+
+
 Campo_Grande_MS = "https://www.aguasguariroba.com.br/legislacao-e-tarifas/"
-AL = "https://www.casal.al.gov.br/estrutura-tarifaria/"

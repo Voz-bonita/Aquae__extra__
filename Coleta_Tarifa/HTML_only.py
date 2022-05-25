@@ -136,9 +136,17 @@ def tarifa_AL():
     return build_mocks(faixas=faixas, aliquotas=aliquotas)
 
 
-def tarifa_Campo_Grande():
-    GUARIROBA = {"io": "https://www.aguasguariroba.com.br/legislacao-e-tarifas/"}
-    df = pd.read_html(**GUARIROBA)[0]
+def tarifa_MS_RJ(uf):
+    """
+    Coleta e retorna a tas tarifas em formato de mocks para
+    Campo Grande (MS) ou Arraial do Cabo (RJ), especificando a uf no argumento
+    """
+    if uf == "MS":
+        endereco = {"io": "https://www.aguasguariroba.com.br/legislacao-e-tarifas/"}
+    elif uf == "RJ":
+        endereco = {"io": "https://www.prolagos.com.br/legislacao-e-tarifas/"}
+
+    df = pd.read_html(**endereco)[0]
     residencial = df[df[0] == "Residencial"].head(1)
 
     faixas = re.findall("\d+ a \d+", list(residencial[1])[0])

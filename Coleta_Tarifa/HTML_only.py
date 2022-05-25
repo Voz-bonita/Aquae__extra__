@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import re
+from lxml import html
 
 
 def build_mocks(faixas, aliquotas):
@@ -153,5 +154,37 @@ def tarifa_MS_RJ(uf):
     faixas[0] = f"0{faixas[0][1:]}"
     faixas.append(f"{int(faixas[-1].split(' a ')[1]) + 1} a 999999")
     aliquotas = list(residencial[2])[0].replace(",", ".").split()
+
+    return build_mocks(faixas=faixas, aliquotas=aliquotas)
+
+
+def tarifa_BA():
+    response = requests.get(
+        "https://www.embasa.ba.gov.br/centralservicos/index.php/tarifas"
+    )
+    soup = BeautifulSoup(response.content)
+    tb_divs = soup.find_all("div", {"class": "supertable-cell-text"})
+    aliquotas = [
+        (
+            aliquota.text.replace(" p/ m3", "")
+            .replace("R$ ", "")
+            .replace(",", ".")
+            .replace(" p/ mês", "")
+        )
+        for aliquota in tb_divs[1 + (10 * 3) : 10 * 4]
+    ]
+    faixas = [
+        (
+            faixa.text.replace("Até ", "")
+            .replace(" m3", "")
+            .replace("-", "a")
+            .replace("> ", "")
+        )
+        for faixa in tb_divs[1 + (10 * 0) : 10 * 1]
+    ]
+
+    aliquotas[0] = float(aliquotas[0]) / float(faixas[0])
+    faixas[0] = f"0 a {faixas[0]}"
+    faixas[-1] = f"{faixas[-1]} a 999999"
 
     return build_mocks(faixas=faixas, aliquotas=aliquotas)

@@ -8,12 +8,12 @@ def get_codigo(csv_INMET):
 
 
 DIR = "Coleta_de_pluviometria"
-with open(f"{DIR}/Pluviometria_Mediana.json", "r") as file:
-    medianas = json.load(file)
+with open(f"{DIR}/Pluviometria_Brasil.json", "r") as file:
+    pluv_br = json.load(file)
 
 csvs = os.listdir(f"{DIR}/CSVs")
 
-cidades = list(medianas.keys())
+cidades = list(pluv_br.keys())
 codigos_unicos = set()
 for cidade in cidades:
     arquivos = list(filter(lambda csv: cidade in csv, csvs))

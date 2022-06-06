@@ -39,7 +39,7 @@ A maior dificuldade dessa solução é que esses dados históricos tem pequenas 
 
 ##### [`Obtenção das medianas`](Coleta_de_pluviometria/Limpa_Pluviometria.py)
 
-Dispondo dos dados de pluviometria de cada estação, organizados num [`único arquivo`](Coleta_de_pluviometria/Pluviometria_Brasil.json), seguiu-se com a obtenção de medianas de cada mês para fazer as simulações do <i>aquae</i>, excluindo para o cálculo dessas medianas os valores zerados e com isso excluindo estações que não apresentassem ao menos três valores não nulos em cada mês, uma vez que valores nulos poderiam ser valores que indicam a não medição da pluviometria e não de fato uma pluviometria nula. Obteve-se o resultado final [`Pluviometria_Mediana`](Coleta_de_pluviometria/Pluviometria_Mediana.json)
+Dispondo dos dados de pluviometria de cada estação, organizados num [`único arquivo`](Coleta_de_pluviometria/Pluviometria_Brasil.json), seguiu-se com a obtenção de medianas de cada mês para fazer as simulações do <i>aquae</i>, excluindo para o cálculo dessas medianas os valores zerados e com isso excluindo estações que não apresentassem ao menos três valores não nulos em cada mês, uma vez que valores nulos poderiam ser valores que indicam a não medição da pluviometria e não de fato uma pluviometria nula. Daí seguiu-se criando arquivos no formato de <i>fixtures</i>, um padrão aceito pelo Django para um conjunto de dados iniciais e as medianas são calculadas pelo back-end quando necessário.
 
 ### `Coleta de tarifa de água`
 

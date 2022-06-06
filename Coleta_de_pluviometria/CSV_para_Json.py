@@ -1,4 +1,5 @@
 import pandas as pd
+import copy
 import json
 import os
 
@@ -84,5 +85,21 @@ for file in files:
     dados[uf][estacao][ano] = mensal
 
 
+dados_clean = copy.deepcopy(dados)
+for estado in dados:
+    for estacao in dados[estado]:
+        meses = [[] for _ in range(12)]
+        for ano in dados[estado][estacao]:
+            for i in range(12):
+                pluv_i = dados[estado][estacao][ano][str(i + 1).zfill(2)]
+                if pluv_i != 0:
+                    meses[i].append(pluv_i)
+
+        # pelo menos 3 observacoes em cada mes
+        min3 = list(map(lambda x: len(x) >= 3, meses))
+        if False in min3:
+            dados_clean[estado].pop(estacao)
+
+
 with open("./Coleta_de_pluviometria/Pluviometria_Brasil.json", "w") as file:
-    json.dump(dados, file)
+    json.dump(dados_clean, file)

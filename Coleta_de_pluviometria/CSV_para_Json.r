@@ -15,11 +15,10 @@ clean_vroom <- function(data) {
             grouping_mark = ".",
             decimal_mark = ",",
             encoding = "ISO-8859-2"
-        ),
-        na = c("-9999", NA)
+        )
     ) %>%
-        na.omit() %>%
         rename_all(~ c("Data", "Chuva")) %>%
+        filter(Chuva != -9999) %>%
         mutate(Data = as.integer(str_sub(Data, start = 6, end = -4L))) %>%
         group_by(Data) %>%
         summarise("Acumulada" = sum(Chuva), "n_obs" = length(Chuva)) %>%
@@ -31,6 +30,25 @@ clean_vroom <- function(data) {
     return(ans)
 }
 
+
+clean_resultados <- function(csvs, estacao) {
+    csvs_estacao <- csvs[stringr::str_detect(csvs, estacao)]
+    info_estacao <- stringr::str_split(csvs_estacao[1], "_")
+    uf <- info_estacao[3]
+    cidade <- info_estacao[5]
+
+    csv_path <- stringr::str_c("Coleta_de_pluviometria/CSVs/", csvs_estacao)
+    resultados <- purrr::map(csv_path, clean_vroom)
+
+    res <- matrix(
+        unlist(resultados, use.names = FALSE),
+        ncol = length(csv_path), nrow = 12
+    ) %>%
+        rowQuantiles(probs = 0.5, na.rm = TRUE) %>%
+        round(digits = 3)
+
+    return(res)
+}
 
 estados <- c(
     "AC", "AL", "AP", "AM", "BA", "CE",
@@ -47,18 +65,4 @@ csvs <- list.files(dir)
 info <- str_split(csvs, "_")
 codigo <- unique(map_chr(info, ~ .x[4]))
 
-csvs_estacao <- csvs[str_detect(csvs, codigo[1])]
-info_estacao <- str_split(csvs_estacao[1], "_")
-uf <- info_estacao[3]
-cidade <- info_estacao[5]
-
-
-csv_path <- str_c("Coleta_de_pluviometria/CSVs/", csvs_estacao)
-resultados <- map(csv_path, clean_vroom)
-
-matrix(
-    unlist(resultados, use.names = FALSE),
-    ncol = length(csv_path), nrow = 12
-) %>%
-    rowQuantiles(probs = 0.5, na.rm = TRUE) %>%
-    round(digits = 3)
+map(codigo[1:2], ~ clean_resultados(csvs, .x))

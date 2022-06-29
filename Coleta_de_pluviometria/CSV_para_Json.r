@@ -27,28 +27,30 @@ clean_vroom <- function(data) {
     ans <- numeric(12)
     ans[res$Data] <- res$Acumulada
     ans[ans == 0] <- NA
-    return(ans)
+    return(as.list(ans))
 }
 
 
 clean_resultados <- function(csvs, estacao) {
     csvs_estacao <- csvs[stringr::str_detect(csvs, estacao)]
-    info_estacao <- stringr::str_split(csvs_estacao[1], "_")
+    anos <- purrr::map_chr(
+        stringr::str_split(csvs_estacao, "_"),
+        ~ str_sub(.x[6], start = 7L)
+    )
+    print(anos)
+    info_estacao <- stringr::str_split(csvs_estacao[1], "_")[[1]]
     uf <- info_estacao[3]
     cidade <- info_estacao[5]
 
     csv_path <- stringr::str_c("Coleta_de_pluviometria/CSVs/", csvs_estacao)
     resultados <- purrr::map(csv_path, clean_vroom)
+    names(resultados) <- anos
 
-    res <- matrix(
-        unlist(resultados, use.names = FALSE),
-        ncol = length(csv_path), nrow = 12
-    ) %>%
-        rowQuantiles(probs = 0.5, na.rm = TRUE) %>%
-        round(digits = 3)
-
-    return(res)
+    ans <- list()
+    ans[[cidade]] <- resultados
+    return(ans)
 }
+
 
 estados <- c(
     "AC", "AL", "AP", "AM", "BA", "CE",
@@ -57,12 +59,13 @@ estados <- c(
     "RJ", "RN", "RS", "RO", "RR", "SC",
     "SP", "SE", "TO"
 )
-df_json <- data(matrix(nrow = 10, ncol = 27)) %>%
-    rename_all(~estados)
+
+json <- map(estados, ~ list())
+names(json) <- estados
 
 dir <- "Coleta_de_pluviometria/CSVs/"
 csvs <- list.files(dir)
 info <- str_split(csvs, "_")
 codigo <- unique(map_chr(info, ~ .x[4]))
 
-map(codigo[1:2], ~ clean_resultados(csvs, .x))
+teste <- map(codigo[1:1], ~ clean_resultados(csvs, .x))

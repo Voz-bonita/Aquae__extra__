@@ -26,7 +26,6 @@ clean_vroom <- function(data) {
 
     ans <- numeric(12)
     ans[res$Data] <- res$Acumulada
-    ans[ans == 0] <- NA
     return(as.list(ans))
 }
 
@@ -37,18 +36,12 @@ clean_resultados <- function(csvs, estacao) {
         stringr::str_split(csvs_estacao, "_"),
         ~ str_sub(.x[6], start = 7L)
     )
-    print(anos)
-    info_estacao <- stringr::str_split(csvs_estacao[1], "_")[[1]]
-    uf <- info_estacao[3]
-    cidade <- info_estacao[5]
 
     csv_path <- stringr::str_c("Coleta_de_pluviometria/CSVs/", csvs_estacao)
     resultados <- purrr::map(csv_path, clean_vroom)
     names(resultados) <- anos
 
-    ans <- list()
-    ans[[cidade]] <- resultados
-    return(ans)
+    return(resultados)
 }
 
 
@@ -66,6 +59,12 @@ names(json) <- estados
 dir <- "Coleta_de_pluviometria/CSVs/"
 csvs <- list.files(dir)
 info <- str_split(csvs, "_")
-codigo <- unique(map_chr(info, ~ .x[4]))
 
-teste <- map(codigo[1:1], ~ clean_resultados(csvs, .x))
+codigo <- unique(map_chr(info, ~ .x[4]))
+codigo_hash <- map_chr(codigo, ~ info[which(str_detect(csvs, .x))][[1]][5])
+
+json <- map(codigo[1:2], ~ clean_resultados(csvs, .x)) %>%
+    magrittr::set_names(codigo_hash[1:2])
+
+c("a", "b", "c") %>%
+    purrr::set_names()

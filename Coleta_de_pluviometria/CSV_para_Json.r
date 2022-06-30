@@ -1,9 +1,20 @@
-pacman::p_load(
+packages <- c(
     "dplyr", "vroom", "stringr",
     "magrittr", "tidyr", "purrr",
-    "matrixStats"
+    "matrixStats", "foreach", "doParallel",
+    "rjson"
+)
+pacman::p_load(packages, character.only = TRUE)
+
+
+n_cores <- parallel::detectCores() - 1
+my_cluster <- parallel::makeCluster(
+    n_cores,
+    type = "PSOCK"
 )
 
+doParallel::registerDoParallel(cl = my_cluster)
+foreach::getDoParRegistered()
 
 clean_vroom <- function(data) {
     res <- vroom(
@@ -19,7 +30,9 @@ clean_vroom <- function(data) {
     ) %>%
         rename_all(~ c("Data", "Chuva")) %>%
         filter(Chuva != -9999) %>%
-        mutate(Data = as.integer(str_sub(Data, start = 6, end = -4L))) %>%
+        mutate(Data = as.integer(
+            stringr::str_sub(Data, start = 6, end = -4L)
+        )) %>%
         group_by(Data) %>%
         summarise("Acumulada" = sum(Chuva), "n_obs" = length(Chuva)) %>%
         mutate(Acumulada = (Acumulada + 1e-10) * (n_obs > 400))
@@ -34,7 +47,7 @@ clean_resultados <- function(csvs, estacao) {
     csvs_estacao <- csvs[stringr::str_detect(csvs, estacao)]
     anos <- purrr::map_chr(
         stringr::str_split(csvs_estacao, "_"),
-        ~ str_sub(.x[6], start = 7L)
+        ~ stringr::str_sub(.x[6], start = 7L)
     )
 
     csv_path <- stringr::str_c("Coleta_de_pluviometria/CSVs/", csvs_estacao)
@@ -61,10 +74,22 @@ csvs <- list.files(dir)
 info <- str_split(csvs, "_")
 
 codigo <- unique(map_chr(info, ~ .x[4]))
-codigo_hash <- map_chr(codigo, ~ info[which(str_detect(csvs, .x))][[1]][5])
+codigo_cidade <- map_chr(codigo, ~ info[which(str_detect(csvs, .x))][[1]][5])
+codigo_uf <- map_chr(codigo, ~ info[which(str_detect(csvs, .x))][[1]][3])
 
-json <- map(codigo[1:2], ~ clean_resultados(csvs, .x)) %>%
-    magrittr::set_names(codigo_hash[1:2])
+json <- list()
+teste <- foreach(
+    i = 1:27,
+    .packages = packages
+) %dopar% {
+    uf <- estados[i]
+    map(
+        codigo[codigo_uf == uf],
+        ~ clean_resultados(csvs, .x)
+    ) %>%
+        magrittr::set_names(codigo_cidade[codigo_uf == uf])
+}
+teste2 <- magrittr::set_names(teste, estados)
 
-c("a", "b", "c") %>%
-    purrr::set_names()
+export <- rjson::toJSON(teste2, indent = 0, method = "C")
+write(export, file = "Teste.json")

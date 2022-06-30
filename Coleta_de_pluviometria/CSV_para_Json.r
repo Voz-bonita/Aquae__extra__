@@ -14,7 +14,6 @@ my_cluster <- parallel::makeCluster(
 )
 
 doParallel::registerDoParallel(cl = my_cluster)
-foreach::getDoParRegistered()
 
 clean_vroom <- function(data) {
     res <- vroom(
@@ -77,8 +76,7 @@ codigo <- unique(map_chr(info, ~ .x[4]))
 codigo_cidade <- map_chr(codigo, ~ info[which(str_detect(csvs, .x))][[1]][5])
 codigo_uf <- map_chr(codigo, ~ info[which(str_detect(csvs, .x))][[1]][3])
 
-json <- list()
-teste <- foreach(
+pluv_br <- foreach(
     i = 1:27,
     .packages = packages
 ) %dopar% {
@@ -89,7 +87,26 @@ teste <- foreach(
     ) %>%
         magrittr::set_names(codigo_cidade[codigo_uf == uf])
 }
-teste2 <- magrittr::set_names(teste, estados)
+pluv_br <- magrittr::set_names(pluv_br, estados)
 
-export <- rjson::toJSON(teste2, indent = 0, method = "C")
-write(export, file = "Teste.json")
+for (uf in names(pluv_br)) {
+    for (estacao in names(pluv_br[[uf]])) {
+        validacao <- matrix(
+            unlist(pluv_br[[uf]][[estacao]]),
+            nrow = 12, ncol = length(pluv_br[[uf]][[estacao]])
+        )
+        decisao <- any(apply(validacao, 1, function(x) sum(x != 0) <= 3))
+        if (decisao) pluv_br[[uf]][[estacao]] <- NULL
+    }
+}
+for (uf in names(pluv_br)) {
+    for (estacao in names(pluv_br[[uf]])) {
+        for (ano in names(pluv_br[[uf]][[estacao]])) {
+            pluv_br[[uf]][[estacao]][[ano]] <- round(
+                pluv_br[[uf]][[estacao]][[ano]], 3
+            )
+        }
+    }
+}
+export <- rjson::toJSON(pluv_br, indent = 0, method = "C")
+write(export, file = "Coleta_de_pluviometria/Pluviometria_Brasil.json")

@@ -65,9 +65,6 @@ estados <- c(
     "SP", "SE", "TO"
 )
 
-json <- map(estados, ~ list())
-names(json) <- estados
-
 dir <- "Coleta_de_pluviometria/CSVs/"
 csvs <- list.files(dir)
 info <- str_split(csvs, "_")

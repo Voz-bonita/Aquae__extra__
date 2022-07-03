@@ -87,6 +87,8 @@ for file in files:
 
 dados_clean = copy.deepcopy(dados)
 for estado in dados:
+    if estado == "RO":
+        continue
     for estacao in dados[estado]:
         meses = [[] for _ in range(12)]
         for ano in dados[estado][estacao]:
